@@ -1,0 +1,11 @@
+.env
+.env.*
+!.env.example
+private/
+*.sqlite*
+*.log
+node_modules/
+supabase/.temp/
+supabase/.branches/
+__pycache__/
+playwright-report/

@@ -1,0 +1,7 @@
+project_id = "socorroanimal"
+
+[functions.pix]
+verify_jwt = false
+
+[functions.pix-sandbox]
+verify_jwt = false

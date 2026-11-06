@@ -1,0 +1,3 @@
+qrcode-generator 2.0.4
+git+https://github.com/kazuhikoarase/qrcode-generator.git
+Licença MIT. Gerador executado localmente no navegador.
