@@ -21,8 +21,14 @@ const impacts = [
 ];
 let selected = 1;
 let showError = false;
+let renderedAmount;
+let renderedImpact;
 
 function renderAmount(amount, impact) {
+  // Formatting the input on blur must not replace the pressed button's contents.
+  if (amount === renderedAmount && impact === renderedImpact) return;
+  renderedAmount = amount;
+  renderedImpact = impact;
   mainButton.dataset.amountCents = amount === null ? '' : String(amount);
   mainButton.dataset.amount = amount === null ? '' : String(amount / 100);
   mainButton.dataset.currency = 'BRL';
