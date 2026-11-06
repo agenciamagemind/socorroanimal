@@ -73,6 +73,6 @@ As instruções para conectar a Hostinger ao Pages estão em [`DNS-HOSTINGER.md`
 
 ## Conferência da publicação — 06/11/2026
 
-O site foi publicado por GitHub Actions e o DNS da Hostinger foi conferido com os quatro IPs do Pages e o CNAME do www. A emissão inicial do certificado HTTPS depende da validação automática do GitHub.
+O site foi publicado por GitHub Actions e o DNS da Hostinger foi conferido com os quatro IPs do Pages e o CNAME do www. O certificado HTTPS está aprovado para o domínio e o www, com redirecionamento obrigatório de HTTP para HTTPS.
 
-A criação e a confirmação em sandbox passaram. Na conferência de produção, a PagueZy retornou HTTP 500 ao criar cobranças de R$ 10,00 e R$ 20,00, embora a autenticação de produção funcione na consulta de saldo. O erro foi reproduzido diretamente na API, fora do Supabase. A geração de Pix real precisa dessa pendência resolvida pela PagueZy; o site não apresenta Pix de teste como se fosse real.
+A criação e a confirmação em sandbox passaram. Após falhas iniciais HTTP 500 na PagueZy, uma nova conferência no site publicado gerou uma cobrança de R$ 20,00 em produção, com ID de transação, QR Code e Pix Copia e Cola. A cópia do código e a consulta de status funcionaram; a cobrança ficou aguardando pagamento. Não houve transferência de dinheiro nem confirmação de pagamento real nesse teste. A causa das falhas anteriores não foi confirmada pela plataforma.
