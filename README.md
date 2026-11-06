@@ -76,3 +76,12 @@ As instruções para conectar a Hostinger ao Pages estão em [`DNS-HOSTINGER.md`
 O site foi publicado por GitHub Actions e o DNS da Hostinger foi conferido com os quatro IPs do Pages e o CNAME do www. O certificado HTTPS está aprovado para o domínio e o www, com redirecionamento obrigatório de HTTP para HTTPS.
 
 A criação e a confirmação em sandbox passaram. Após falhas iniciais HTTP 500 na PagueZy, uma nova conferência no site publicado gerou uma cobrança de R$ 20,00 em produção, com ID de transação, QR Code e Pix Copia e Cola. A cópia do código e a consulta de status funcionaram; a cobrança ficou aguardando pagamento. Não houve transferência de dinheiro nem confirmação de pagamento real nesse teste. A causa das falhas anteriores não foi confirmada pela plataforma.
+
+
+## Valor personalizado e vídeo da capa
+
+A última opção de doação é **Outro valor**. O campo aceita reais e centavos no formato brasileiro (por exemplo, `37,45`) e atualiza o botão antes de gerar o Pix. Navegador, função e banco validam centavos inteiros positivos; o limite técnico é o da coluna `integer`. Os sete valores sugeridos continuam disponíveis e o padrão é R$ 20,00.
+
+O vídeo enviado pelo responsável está em `site/videos/vsl-video.mp4`, com H.264/AAC e metadados de início rápido. A proporção original de 922 × 720 é preservada sem recorte. O player aparece ao lado do texto no computador e dentro do texto da capa no celular, antes dos botões. A imagem de capa é um quadro do próprio vídeo; o arquivo só é carregado quando a reprodução começa.
+
+O checkout atual usa `pix-checkout.js` como módulo. O arquivo anterior `pix.js` permanece para compatibilidade com páginas antigas ainda no cache do navegador; os novos arquivos têm URLs próprias para evitar misturar as duas versões.

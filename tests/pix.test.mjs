@@ -59,17 +59,18 @@ test('requires signed session and CSRF for creation',async()=>{
   assert.equal((await f.create({...b,csrf:'0'.repeat(64)})).status,403);
   assert.equal(f.state.calls.length,0);
 });
-test('validates integer cents and all eight amounts',async()=>{
+test('validates integer cents, preset amounts and custom donations',async()=>{
   const f=fixture(),b=await f.boot();
-  for(const bad of [0,-1,20,1234,2000.2,'2000',null])assert.equal((await f.create(b,bad)).status,422);
-  for(const amount of [1000,2000,3000,5000,10000,25000,50000,100000]){
+  for(const bad of [0,-1,2147483648,2000.2,'2000',null,true])assert.equal((await f.create(b,bad)).status,422);
+  const amounts=[1000,2000,3000,5000,10000,25000,50000,100000,1234,1,2147483647];
+  for(const amount of amounts){
     const p=await f.create(b,amount);assert.equal(p.status,201);assert.equal(p.data.amount,amount);assert.equal(p.data.status,'pending');
   }
-  assert.equal(f.state.calls.length,8);assert.ok(f.state.calls.every(c=>!c.body.customer && c.body.payment_method==='pix'));
+  assert.equal(f.state.calls.length,amounts.length);assert.ok(f.state.calls.every(c=>!c.body.customer && c.body.payment_method==='pix'));
 });
 test('repeated clicks and pending orders do not create duplicate upstream charges',async()=>{
   const f=fixture(),b=await f.boot(),id=crypto.randomUUID();
-  const a=await f.create(b,2000,id),again=await f.create(b,2000,id),other=await f.create(b);
+  const a=await f.create(b,3745,id),again=await f.create(b,3745,id),other=await f.create(b,3745);
   assert.equal(a.data.token,again.data.token);assert.equal(a.data.token,other.data.token);assert.equal(f.state.calls.length,1);
 });
 test('different donor session cannot retrieve another payment',async()=>{

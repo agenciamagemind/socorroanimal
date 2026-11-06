@@ -2,7 +2,7 @@ type Env = Record<string, string | undefined>;
 type Row = Record<string, any>;
 type Mode = 'sandbox' | 'production';
 const encoder = new TextEncoder();
-const allowedAmounts = new Set([1000,2000,3000,5000,10000,25000,50000,100000]);
+const validAmount = (amount: unknown): amount is number => typeof amount==='number' && Number.isInteger(amount) && amount>=1 && amount<=2147483647;
 const statuses = new Set(['pending','paid','expired','failed']);
 class HttpError extends Error {
   status: number;
@@ -136,7 +136,7 @@ export function createHandler(env: Env, mode: Mode, transport: typeof fetch = fe
         if(!await validSignature(sessionSecret,'csrf:'+token,req.headers.get('x-csrf-token') || '')) throw new HttpError(403,'Sua sessão expirou. Atualize a página e tente novamente.');
         if(!(req.headers.get('content-type') || '').toLowerCase().startsWith('application/json')) throw new HttpError(415,'Solicitação inválida.');
         let input: Row;try{input=JSON.parse(await readBody(req,8192));}catch(e){if(e instanceof HttpError)throw e;throw new HttpError(400,'Solicitação inválida.');}
-        if(!input || !Number.isInteger(input.amount) || !allowedAmounts.has(input.amount)) throw new HttpError(422,'Escolha um dos valores de doação disponíveis.');
+        if(!input || !validAmount(input.amount)) throw new HttpError(422,'Informe um valor de doação válido e maior que zero.');
         if(typeof input.request_id!=='string' || !/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i.test(input.request_id)) throw new HttpError(422,'Não foi possível iniciar esta solicitação. Atualize a página.');
         const ip=(req.headers.get('x-real-ip') || req.headers.get('x-forwarded-for')?.split(',')[0] || 'unknown').trim();
         const ipHash=await sign(sessionSecret,'ip:'+ip);

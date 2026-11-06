@@ -1,0 +1,84 @@
+.hero__main-video-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 461 / 360;
+  overflow: hidden;
+  border-radius: 20px;
+  background: #000;
+}
+.hero__video-player {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  aspect-ratio: 461 / 360;
+  object-fit: contain;
+  border-radius: inherit;
+  background: #000;
+}
+.hero__media-card--mobile { display: none !important; }
+.custom-donation {
+  margin-top: 16px;
+  padding: 18px;
+  text-align: left;
+  border: 1px solid #bbf7d0;
+  border-radius: 14px;
+  background: #f0fdf4;
+}
+.custom-donation[hidden] { display: none; }
+.custom-donation label {
+  display: block;
+  margin-bottom: 9px;
+  color: #166534;
+  font-size: .95rem;
+  font-weight: 700;
+}
+.custom-donation__field {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 0 14px;
+  border: 2px solid #bbf7d0;
+  border-radius: 10px;
+  background: #fff;
+  transition: border-color .2s, box-shadow .2s;
+}
+.custom-donation__field:focus-within {
+  border-color: #15803d;
+  box-shadow: 0 0 0 3px rgb(21 128 61 / 12%);
+}
+.custom-donation__field > span { color: #166534; font-size: 1.2rem; font-weight: 800; }
+.custom-donation__field input {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  min-height: 54px;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: #14532d;
+  font: inherit;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+.custom-donation__field input::placeholder { color: #6b7280; font-size: 1rem; font-weight: 400; }
+.custom-donation__field input:focus,
+.custom-donation__field input:focus-visible {
+  /* The surrounding field supplies the visible focus border and ring. */
+  outline: 0 !important;
+  box-shadow: none !important;
+}
+.custom-donation__hint, .custom-donation__error { margin: 8px 0 0; font-size: .83rem; line-height: 1.5; }
+.custom-donation__hint { color: #4b5563; }
+.custom-donation__error { color: #b91c1c; font-weight: 600; }
+@media (max-width: 768px) {
+  .hero__media-card--desktop { display: none !important; }
+  .hero__media-card--mobile { display: block !important; margin: 4px 0 24px !important; }
+  .hero__media-card { padding: 12px; border-radius: 20px; }
+  .hero__main-video-wrap { border-radius: 14px; }
+  .hero__card-top { gap: 8px; flex-wrap: wrap; padding: 0; }
+  .hero__card-badge { font-size: .77rem; }
+  .hero__card-live { font-size: .65rem; }
+  .custom-donation { padding: 14px; }
+}
