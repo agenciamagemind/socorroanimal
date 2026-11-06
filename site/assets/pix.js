@@ -37,7 +37,7 @@
       <div class="pix-success" hidden><span aria-hidden="true">💚</span><h3>Sua ajuda chegou. Muito obrigado!</h3><p>Seu Pix foi confirmado. Seu gesto ajuda a levar cuidado e esperança aos animais resgatados.</p><button class="pix-check pix-another" type="button">Fazer outra doação</button></div>
       <p class="pix-status" role="status" aria-live="polite"></p>
       <button class="pix-primary pix-retry" type="button" hidden>Tentar novamente</button>
-      <p class="pix-provider">Pix processado pela PagueZy</p>
+      <p class="pix-provider">Pagamento seguro via Pix</p>
     </div>`;
   dialog.querySelector('.pix-banner').src = banner;
   document.body.append(dialog);

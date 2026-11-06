@@ -62,7 +62,7 @@ export function createHandler(env: Env, mode: Mode, transport: typeof fetch = fe
     let response: Response;
     try { response=await transport('https://paguezy.com/api/v1'+path,{method,headers:{'Content-Type':'application/json','Accept':'application/json','X-Api-Key':apiKey,'X-Api-Secret':apiSecret},body:body?JSON.stringify(body):undefined,signal:AbortSignal.timeout(25000),redirect:'error'}); }
     catch { throw new HttpError(502,'Não foi possível confirmar a solicitação de Pix. Aguarde um pouco antes de tentar novamente.'); }
-    if (!response.ok) throw new HttpError(502,'A PagueZy não conseguiu concluir esta solicitação. Tente novamente em instantes.');
+    if (!response.ok) throw new HttpError(502,'Não foi possível concluir esta solicitação de pagamento. Tente novamente em instantes.');
     let data: Row;
     try { data=await response.json(); } catch { throw new HttpError(502,'Não foi possível consultar seu Pix agora.'); }
     if (!data || typeof data!=='object' || data.success===false) throw new HttpError(502,'Não foi possível concluir esta solicitação de Pix.');
