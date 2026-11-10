@@ -21,6 +21,12 @@ Arquivos do Pix: [`site/assets/pix.js`](site/assets/pix.js), [`site/assets/pix.c
 
 O fluxo é: selecionar o valor → clicar em Ajudar → ler o QR Code ou copiar o código → pagar no banco → aguardar a confirmação da PagueZy. Não há redirecionamento para checkout externo nem pedido de nome/CPF.
 
+## Meta Pixel
+
+O Pixel `1765726981167401` registra `PageView` na visita. O evento `Purchase` é enviado com o valor confirmado e `BRL` somente quando a consulta autenticada do Pix retorna `paid` em produção. Um identificador local derivado do hash da cobrança evita repetir a conversão no mesmo navegador. Criar o Pix, copiar o código ou clicar em “Já paguei” não gera compra; pagamentos de sandbox também não.
+
+Como esta integração é pelo navegador, uma doação confirmada enquanto a página está fechada pode não ser contabilizada no Meta. A cobertura desses casos exige integração server-side com a API de Conversões (CAPI), credencial do Meta e confirmação do Pix por webhook.
+
 ## Servidor do Pix
 
 - Produção: `https://lfvnnxdbphxbscnrrpoi.supabase.co/functions/v1/pix`

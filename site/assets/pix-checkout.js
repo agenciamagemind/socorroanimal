@@ -1,4 +1,5 @@
 import {isValidAmountCents} from './amount.js';
+import {trackConfirmedDonation} from './meta-pixel.js';
 
 (() => {
   'use strict';
@@ -83,6 +84,7 @@ import {isValidAmountCents} from './amount.js';
     $('.pix-details').hidden = payment.status !== 'pending';
     if (payment.status === 'paid') {
       $('.pix-status').textContent = 'Pagamento confirmado.';
+      void trackConfirmedDonation(payment);
       clearTimer();
       return;
     }

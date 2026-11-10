@@ -7,6 +7,14 @@ const html=fs.readFileSync(new URL('index.html',root),'utf8');
 assert.ok(html.includes('lang=pt-BR'));
 assert.equal(fs.readFileSync(new URL('CNAME',root),'utf8').trim(),'socorroanimal.online');
 assert.ok(html.includes('https://lfvnnxdbphxbscnrrpoi.supabase.co/functions/v1/pix'));
+assert.ok(html.includes("fbq('init','1765726981167401')"));
+assert.ok(html.includes("fbq('track','PageView')"));
+assert.ok(html.includes('https://connect.facebook.net/en_US/fbevents.js'));
+assert.ok(html.includes('https://www.facebook.com/tr?id=1765726981167401&ev=PageView&noscript=1'));
+assert.ok(html.includes('script-src \'self\' \'unsafe-inline\' data: https://connect.facebook.net;'));
+assert.ok(html.includes('img-src \'self\' data: https://www.facebook.com;'));
+assert.ok(html.includes('connect-src \'self\' https://lfvnnxdbphxbscnrrpoi.supabase.co https://www.facebook.com;'));
+assert.ok(html.includes('assets/pix-checkout.js?v=20261110-meta'));
 for(const match of html.matchAll(/(?:src|href|poster)="((?:assets|videos)\/[^"]+)"/g))assert.ok(fs.existsSync(new URL(match[1],root)),match[1]);
 function scan(dir){for(const entry of fs.readdirSync(dir,{withFileTypes:true})){const f=path.join(dir,entry.name);if(entry.isDirectory())scan(f);else if(/\.(html|css|js)$/.test(f)){const text=fs.readFileSync(f,'utf8');assert.ok(!/\b(?:sk_live_|sk_test_|sb_secret_)[A-Za-z0-9]{16,}/.test(text),`Secret in ${f}`);}}}
 scan(fileURLToPath(root));
