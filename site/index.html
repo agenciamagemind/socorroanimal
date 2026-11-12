@@ -85,7 +85,7 @@ fbq('track','PageView');
 
  <div class=hero__social-pulse id=socialPulse>
  <span class=pulse-dot></span>
- <span id=pulseText>María G. (Nova Iguaçu, RJ) acabou de doar R$ 50,00</span>
+ <span id=pulseText>94 doadores já ajudaram hoje. Faça parte dessa corrente!</span>
  </div>
 
  <div class="hero__media-card hero__media-card--mobile">
@@ -112,13 +112,13 @@ fbq('track','PageView');
 
  <div class=hero__thermo>
  <div class=hero__thermo-label>
- <span>Meta urgente: R$ 5.000,00</span>
- <strong id=heroRaised>R$ 2.450,00 arrecadados</strong>
+ <span>Meta urgente: R$ 3.000,00</span>
+ <strong id=heroRaised>R$ 970,00 arrecadados</strong>
  </div>
- <div class=hero__thermo-bar>
- <div class=hero__thermo-fill id=heroFill style=width:49%></div>
+ <div class=hero__thermo-bar role=progressbar aria-label="Progresso da campanha" aria-valuemin=0 aria-valuemax=3000 aria-valuenow=970>
+ <div class=hero__thermo-fill id=heroFill style=width:32.33%></div>
  </div>
- <p class=hero__thermo-hint>Cada doação, por menor que seja, aparece aqui em tempo real</p>
+ <p class=hero__thermo-hint>32,3% da meta alcançada. Sua ajuda faz a diferença!</p>
  </div>
  </div>
 
@@ -197,12 +197,12 @@ fbq('track','PageView');
  <div class=impact__value>R$ 10,00</div>
  <div class=impact__desc>Alimenta 1 animal por 2 dias inteiros</div>
  </div>
- <div class=impact__card>
+ <div class="impact__card impact__card--featured">
+ <div class=impact__badge-label>Mais escolhido</div>
  <div class=impact__value>R$ 30,00</div>
  <div class=impact__desc>Alimentação completa e medicamentos básicos para 1 animal por 1 semana</div>
  </div>
- <div class="impact__card impact__card--featured">
- <div class=impact__badge-label>Mais escolhido</div>
+ <div class=impact__card>
  <div class=impact__value>R$ 50,00</div>
  <div class=impact__desc>1 saco de ração de 10kg — alimenta 5 animais por 1 mês</div>
  </div>
@@ -215,8 +215,8 @@ fbq('track','PageView');
  <div class=impact__desc>Tratamento veterinário intensivo e medicamentos por um mês para 3 animais</div>
  </div>
  <div class=impact__card>
- <div class=impact__value>R$ 1.000,00</div>
- <div class=impact__desc>Cobre cirurgias de emergência e internações de casos críticos</div>
+ <div class=impact__value>R$ 500,00</div>
+ <div class=impact__desc>Ajuda a custear cuidados intensivos e a recuperação de animais resgatados</div>
  </div>
  </div>
  </div>
@@ -399,15 +399,15 @@ fbq('track','PageView');
 
  <div class=thermometer>
  <div class=thermometer__labels>
- <span class=thermometer__raised id=raisedAmount>R$ 2.450,00 arrecadados</span>
- <span class=thermometer__goal>Meta do dia: R$ 5.000,00</span>
+ <span class=thermometer__raised id=raisedAmount>R$ 970,00 arrecadados</span>
+ <span class=thermometer__goal>Meta do dia: R$ 3.000,00</span>
  </div>
- <div class=thermometer__track>
- <div class=thermometer__fill id=thermometerFill style=width:49%></div>
- <div class=thermometer__pct id=thermometerPct>49%</div>
+ <div class=thermometer__track role=progressbar aria-label="Progresso da campanha" aria-valuemin=0 aria-valuemax=3000 aria-valuenow=970>
+ <div class=thermometer__fill id=thermometerFill style=width:32.33%></div>
+ <div class=thermometer__pct id=thermometerPct>32,3%</div>
  </div>
  <div class=thermometer__donors>
- <span id=donorCount>312 doadores</span> já ajudaram hoje. Seja o próximo!
+ <span id=donorCount>94 doadores</span> já ajudaram hoje. Seja o próximo!
  </div>
  </div>
 
@@ -415,16 +415,16 @@ fbq('track','PageView');
  <div class=ticker-header-row>
  <div class=ticker-header>
  <span class=ticker-dot></span>
- <strong>Doações ao vivo:</strong>
+ <strong id=tickerHeading>Exemplos de contribuições:</strong>
  </div>
  <div class=ticker-nav-controls>
  <button type=button class="ticker-nav-btn ticker-nav-btn--prev" aria-label="Ver doação anterior" title="Doação anterior">‹</button>
- <span class=ticker-counter id=tickerCounter>6/10</span>
+ <span class=ticker-counter id=tickerCounter>1/10</span>
  <button type=button class="ticker-nav-btn ticker-nav-btn--next" aria-label="Ver próxima doação" title="Próxima doação">›</button>
  </div>
  </div>
  <div class=ticker-slider-wrap id=tickerScrollWrap>
- <div class=ticker-track id=tickerItems style=transform:translateX(-500%)><div class=ticker-slide><div class=ticker-item>🟢 Há 2 min • <strong>R$ 50,00</strong> (Nova Iguaçu, RJ)</div></div><div class=ticker-slide><div class=ticker-item>🟢 Há 5 min • <strong>R$ 30,00</strong> (Florianópolis, SC)</div></div><div class=ticker-slide><div class=ticker-item>🟢 Há 9 min • <strong>R$ 100,00</strong> (Curitiba, PR)</div></div><div class=ticker-slide><div class=ticker-item>🟢 Há 14 min • <strong>R$ 50,00</strong> (Belo Horizonte, MG)</div></div><div class=ticker-slide><div class=ticker-item>🟢 Há 21 min • <strong>R$ 30,00</strong> (Salvador, BA)</div></div><div class=ticker-slide><div class=ticker-item>🟢 Há 29 min • <strong>R$ 250,00</strong> (Recife, PE)</div></div><div class=ticker-slide><div class=ticker-item>🟢 Há 36 min • <strong>R$ 15,00</strong> (Campinas, SP)</div></div><div class=ticker-slide><div class=ticker-item>🟢 Há 44 min • <strong>R$ 50,00</strong> (Fortaleza, CE)</div></div><div class=ticker-slide><div class=ticker-item>🟢 Há 52 min • <strong>R$ 100,00</strong> (Goiânia, GO)</div></div><div class=ticker-slide><div class=ticker-item>🟢 Há 1 hora • <strong>R$ 30,00</strong> (Manaus, AM)</div></div></div>
+ <div class=ticker-track id=tickerItems><div class=ticker-slide><div class=ticker-item>🐾 Valor ilustrativo • <strong>R$ 10,00</strong></div></div></div>
  </div>
  </div>
 
@@ -980,8 +980,10 @@ fbq('track','PageView');
 
 <style>#commentsFeed{scroll-margin-top:110px}#faq .faq__answer[hidden]{display:none!important}.tier-btn:focus-visible,.comment-page-btn:focus-visible,.faq__question:focus-visible{outline:3px solid #166534;outline-offset:3px}</style>
 <link rel=stylesheet href="assets/pix.css">
+<link rel=stylesheet href="assets/pix-layout.css?v=20261112-1">
 <link rel="stylesheet" href="assets/page.css?v=20261106-brand">
 <script type="module" src="assets/donation.js?v=20261106-2"></script>
+ <script type="module" src="assets/recent-donations.js?v=20261112-1"></script>
 <script type="module" src="assets/hero-video.js"></script>
 <script src="assets/vendor/qrcode.js"></script>
 <script src="assets/vendor/qrcode_UTF8.js"></script>

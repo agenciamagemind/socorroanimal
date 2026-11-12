@@ -25,17 +25,23 @@ import {trackConfirmedDonation} from './meta-pixel.js';
       <p class="pix-amount" id="pixAmount"></p>
       <div class="pix-loading" role="status"><span class="pix-spinner" aria-hidden="true"></span><p>Preparando seu Pix…</p></div>
       <div class="pix-details" hidden>
-        <div class="pix-qr" role="img" aria-label="QR Code do Pix da sua doação"></div>
+        <div class="pix-copy-block">
+          <label for="pixCopyCode">Pix Copia e Cola</label>
+          <p class="pix-copy-tip">No celular, copie o código e cole no aplicativo do seu banco.</p>
+          <textarea id="pixCopyCode" readonly rows="2" spellcheck="false" aria-label="Código Pix Copia e Cola"></textarea>
+          <button class="pix-primary" type="button" id="pixCopyButton">Copiar código Pix</button>
+        </div>
+        <div class="pix-qr-block">
+          <p class="pix-qr-caption">ou escaneie o QR Code</p>
+          <div class="pix-qr" role="img" aria-label="QR Code do Pix da sua doação"></div>
+        </div>
+        <button class="pix-check" type="button">Já paguei, verificar pagamento</button>
         <div class="pix-instructions">
           <h3>Como ajudar pelo Pix</h3>
-          <p>Abra o aplicativo do seu banco e escaneie o QR Code ou use o Pix Copia e Cola.</p>
+          <p>Abra seu banco, escolha Pix Copia e Cola e cole o código acima. Se estiver em outro aparelho, escaneie o QR Code.</p>
           <p>Confira o valor e os dados do recebedor antes de confirmar.</p>
           <p class="pix-expiry" hidden></p>
         </div>
-        <label for="pixCopyCode">Pix Copia e Cola</label>
-        <textarea id="pixCopyCode" readonly rows="3" spellcheck="false" aria-label="Código Pix Copia e Cola"></textarea>
-        <button class="pix-primary" type="button" id="pixCopyButton">Copiar código Pix</button>
-        <button class="pix-check" type="button">Já paguei, verificar pagamento</button>
       </div>
       <div class="pix-success" hidden><span aria-hidden="true">💚</span><h3>Sua ajuda chegou. Muito obrigado!</h3><p>Seu Pix foi confirmado. Seu gesto ajuda a levar cuidado e esperança aos animais resgatados.</p><button class="pix-check pix-another" type="button">Fazer outra doação</button></div>
       <p class="pix-status" role="status" aria-live="polite"></p>
@@ -104,7 +110,7 @@ import {trackConfirmedDonation} from './meta-pixel.js';
       qr.make();
       $('.pix-qr').innerHTML = qr.createSvgTag({scalable:true,margin:4});
     } catch {
-      $('.pix-qr').textContent = 'Use o código Pix Copia e Cola abaixo para fazer sua doação.';
+      $('.pix-qr').textContent = 'Use o código Pix Copia e Cola acima para fazer sua doação.';
     }
     $('.pix-expiry').hidden = true;
     if (payment.expires_at) {

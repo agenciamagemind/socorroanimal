@@ -1,0 +1,26 @@
+/* Mobile-first Pix checkout: copy first, QR second, instructions last. */
+.pix-body{padding:18px 24px 24px}
+.pix-amount{margin:3px 0 13px}
+.pix-details{display:flex;flex-direction:column;align-items:stretch;gap:14px;text-align:center}
+.pix-copy-block{display:flex;flex-direction:column;gap:9px;padding:15px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:16px}
+.pix-copy-block label{font-size:1.1rem;font-weight:800;color:#166534}
+.pix-copy-tip{font-size:.87rem;line-height:1.45;color:#475569;margin:0 0 2px}
+.pix-copy-block textarea{min-height:60px;max-height:72px;background:white;border-color:#cbd5e1}
+.pix-copy-block .pix-primary{min-height:49px;box-shadow:0 4px 12px #15803d22}
+.pix-qr-block{display:flex;align-items:center;flex-direction:column;gap:10px}
+.pix-qr-caption{display:flex;align-items:center;gap:12px;justify-content:center;width:100%;color:#64748b;font-size:.83rem;margin:0}
+.pix-qr-caption::before,.pix-qr-caption::after{content:"";height:1px;width:min(22%,90px);background:#e2e8f0}
+.pix-qr{width:210px;box-sizing:border-box;padding:8px}
+.pix-check{align-self:center;padding:4px 10px}
+.pix-instructions{width:100%;box-sizing:border-box;border-top:1px solid #e2e8f0;padding:15px 4px 0;text-align:left}
+.pix-instructions h3{margin:0 0 8px}
+.pix-instructions p:last-child{margin-bottom:0}
+@media(max-width:520px){
+  .pix-body{padding:17px 16px 22px}
+  .pix-body h2{font-size:1.35rem}
+  .pix-amount{font-size:1.85rem;margin:3px 0 12px}
+  .pix-details{gap:13px}
+  .pix-copy-block{padding:13px;gap:8px}
+  .pix-qr{width:min(205px,70vw)}
+  .pix-instructions{text-align:left}
+}

@@ -36,7 +36,7 @@ function fixture() {
       return Response.json(row);
     }
     if(rpc==='socorro_claim_pix')return Response.json({claimed:true,payment:state.rows.find(r=>r.token===body.p_token)});
-    const rows=state.rows.filter(r=>(!u.searchParams.has('token') || 'eq.'+r.token===u.searchParams.get('token')) && (!u.searchParams.has('owner_hash') || 'eq.'+r.owner_hash===u.searchParams.get('owner_hash')));
+    const rows=state.rows.filter(r=>(!u.searchParams.has('token') || 'eq.'+r.token===u.searchParams.get('token')) && (!u.searchParams.has('owner_hash') || 'eq.'+r.owner_hash===u.searchParams.get('owner_hash')) && (!u.searchParams.has('status') || 'eq.'+r.status===u.searchParams.get('status')) && (!u.searchParams.has('mode') || 'eq.'+r.mode===u.searchParams.get('mode')));
     return Response.json(rows);
   };
   const handler=createHandler(env,'sandbox',transport);
@@ -109,4 +109,22 @@ test('HMAC webhook rejects tampering and accepts duplicate valid paid events',as
 test('public responses never include provider credentials or private owner data',async()=>{
   const f=fixture(),b=await f.boot(),p=await f.create(b),text=JSON.stringify(p.data);
   for(const value of ['sk_test_mock','pk_test_mock','sb_secret_mock','owner_hash','external_reference'])assert.ok(!text.includes(value));
+});
+test('recent donation feed includes only paid amounts, up to R$160, without private payment data',async()=>{
+  const f=fixture();
+  f.state.rows.push(
+    {amount:1000,status:'paid',mode:'sandbox',owner_hash:'private1',token:'sensitive1'},
+    {amount:2000,status:'pending',mode:'sandbox',owner_hash:'private2'},
+    {amount:3000,status:'paid',mode:'sandbox',owner_hash:'private3'},
+    {amount:10000,status:'paid',mode:'sandbox',owner_hash:'private4'},
+    {amount:50000,status:'paid',mode:'sandbox',owner_hash:'private5'},
+    {amount:1000,status:'paid',mode:'production',owner_hash:'private6'},
+    {amount:2000,status:'paid',mode:'sandbox',owner_hash:'private7'},
+  );
+  const recent=await f.call('recent');
+  assert.equal(recent.status,200);
+  assert.deepEqual(recent.data.donations,[{amount_cents:1000},{amount_cents:3000},{amount_cents:10000},{amount_cents:2000}]);
+  assert.equal(recent.data.donations.reduce((sum,d)=>sum+d.amount_cents,0),16000);
+  assert.ok(!JSON.stringify(recent.data).includes('private'));
+  assert.equal((await f.handler(new Request(base+'?action=recent',{headers:{Origin:'https://other.invalid'}}))).status,403);
 });
