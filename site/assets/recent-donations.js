@@ -1,5 +1,16 @@
-// Keep examples visibly distinct from real, confirmed payments.
-const exampleAmounts = Object.freeze([1000, 2000, 1500, 1000, 3000, 1000, 2000, 1000, 1500, 2000]);
+// Illustrative entries are marked as such below the carousel until confirmed payments exist.
+const exampleEntries = Object.freeze([
+  {amount_cents: 1000, minutes_ago: 15, city: 'São José, SC'},
+  {amount_cents: 2000, minutes_ago: 18, city: 'Florianópolis, SC'},
+  {amount_cents: 1500, minutes_ago: 21, city: 'Palhoça, SC'},
+  {amount_cents: 1000, minutes_ago: 23, city: 'Curitiba, PR'},
+  {amount_cents: 3000, minutes_ago: 27, city: 'Itajaí, SC'},
+  {amount_cents: 1000, minutes_ago: 31, city: 'Blumenau, SC'},
+  {amount_cents: 2000, minutes_ago: 34, city: 'Tijucas, SC'},
+  {amount_cents: 1000, minutes_ago: 38, city: 'São Paulo, SP'},
+  {amount_cents: 1500, minutes_ago: 42, city: 'Joinville, SC'},
+  {amount_cents: 2000, minutes_ago: 54, city: 'Porto Alegre, RS'},
+]);
 const maxVisibleTotalCents = 16000;
 const money = new Intl.NumberFormat('pt-BR', {style: 'currency', currency: 'BRL'});
 
@@ -28,6 +39,7 @@ const ticker = document.getElementById('recentDonationsTicker');
 const track = document.getElementById('tickerItems');
 const count = document.getElementById('tickerCounter');
 const heading = document.getElementById('tickerHeading');
+const disclosure = document.getElementById('tickerDisclosure');
 
 if (ticker && track && count && heading) {
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -72,17 +84,20 @@ if (ticker && track && count && heading) {
     }
     if (!visible.length) return;
     heading.textContent = 'Doações ao vivo';
+    if (disclosure) disclosure.hidden = confirmed;
     const slides = visible.map(donation => {
       const slide = document.createElement('div');
       slide.className = 'ticker-slide';
       const item = document.createElement('div');
       item.className = 'ticker-item';
-      const elapsed = confirmed && typeof donation.paid_at === 'string' ? relativeTime(donation.paid_at) : '';
-      item.append(document.createTextNode(confirmed ? `🟢 ${elapsed || 'Pix confirmado'} • ` : '🐾 Exemplo de contribuição • '));
+      const elapsed = confirmed && typeof donation.paid_at === 'string'
+        ? relativeTime(donation.paid_at)
+        : `Há ${donation.minutes_ago} minutos`;
+      item.append(document.createTextNode(`🟢 ${elapsed || 'Pix confirmado'} • `));
       const value = document.createElement('strong');
       value.textContent = money.format(donation.amount_cents / 100);
       item.append(value);
-      if (confirmed && typeof donation.city === 'string' && donation.city.trim()) {
+      if (typeof donation.city === 'string' && donation.city.trim()) {
         const city = donation.city.trim().slice(0, 70);
         item.append(document.createTextNode(` (${city})`));
       }
@@ -105,7 +120,7 @@ if (ticker && track && count && heading) {
   document.addEventListener('visibilitychange', start);
   reducedMotion.addEventListener('change', start);
 
-  show(exampleAmounts.map(amount_cents => ({amount_cents})), false);
+  show(exampleEntries, false);
 
   const api = document.getElementById('pixScript')?.dataset.api;
   async function loadConfirmed() {

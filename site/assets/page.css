@@ -84,6 +84,9 @@
 .recent-donations-ticker .ticker-header strong { overflow-wrap: normal; }
 .recent-donations-ticker .ticker-nav-controls { flex: 0 0 auto; }
 .recent-donations-ticker .ticker-counter { min-width: 40px; box-sizing: border-box; }
+.recent-donations-ticker .ticker-item { display: block; text-overflow: ellipsis; }
+.ticker-disclosure { color: #486b55; font-size: .71rem; line-height: 1.2; text-align: right; }
+.ticker-disclosure[hidden] { display: none; }
 @media (max-width: 420px) {
   .recent-donations-ticker { padding: 10px; }
   .recent-donations-ticker .ticker-header-row { gap: 6px; }
