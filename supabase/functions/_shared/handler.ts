@@ -124,14 +124,14 @@ export function createHandler(env: Env, mode: Mode, transport: typeof fetch = fe
       if(req.method==='OPTIONS') return new Response(null,{status:204,headers:cors});
       if(action==='recent' && req.method==='GET') {
         if(!serviceKey || !dbUrl) throw new HttpError(503,'Doações recentes indisponíveis.');
-        const params=new URLSearchParams({select:'amount',mode:'eq.'+mode,status:'eq.paid',order:'checked_at.desc',limit:'50'});
+        const params=new URLSearchParams({select:'amount,checked_at',mode:'eq.'+mode,status:'eq.paid',order:'checked_at.desc',limit:'50'});
         const rows=await database('socorro_pix_payments?'+params);
-        const donations: {amount_cents:number}[]=[];
+        const donations: {amount_cents:number;paid_at:string|null}[]=[];
         let total=0;
         for(const row of rows) {
           const amount=row.amount;
           if(!Number.isInteger(amount) || amount<=0 || total+amount>16000) continue;
-          donations.push({amount_cents:amount});
+          donations.push({amount_cents:amount,paid_at:typeof row.checked_at==='string'?row.checked_at:null});
           total+=amount;
           if(donations.length===10 || total===16000) break;
         }

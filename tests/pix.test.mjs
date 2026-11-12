@@ -113,7 +113,7 @@ test('public responses never include provider credentials or private owner data'
 test('recent donation feed includes only paid amounts, up to R$160, without private payment data',async()=>{
   const f=fixture();
   f.state.rows.push(
-    {amount:1000,status:'paid',mode:'sandbox',owner_hash:'private1',token:'sensitive1'},
+    {amount:1000,status:'paid',mode:'sandbox',owner_hash:'private1',token:'sensitive1',checked_at:'2026-11-12T11:00:00.000Z'},
     {amount:2000,status:'pending',mode:'sandbox',owner_hash:'private2'},
     {amount:3000,status:'paid',mode:'sandbox',owner_hash:'private3'},
     {amount:10000,status:'paid',mode:'sandbox',owner_hash:'private4'},
@@ -123,7 +123,12 @@ test('recent donation feed includes only paid amounts, up to R$160, without priv
   );
   const recent=await f.call('recent');
   assert.equal(recent.status,200);
-  assert.deepEqual(recent.data.donations,[{amount_cents:1000},{amount_cents:3000},{amount_cents:10000},{amount_cents:2000}]);
+  assert.deepEqual(recent.data.donations,[
+    {amount_cents:1000,paid_at:'2026-11-12T11:00:00.000Z'},
+    {amount_cents:3000,paid_at:null},
+    {amount_cents:10000,paid_at:null},
+    {amount_cents:2000,paid_at:null},
+  ]);
   assert.equal(recent.data.donations.reduce((sum,d)=>sum+d.amount_cents,0),16000);
   assert.ok(!JSON.stringify(recent.data).includes('private'));
   assert.equal((await f.handler(new Request(base+'?action=recent',{headers:{Origin:'https://other.invalid'}}))).status,403);

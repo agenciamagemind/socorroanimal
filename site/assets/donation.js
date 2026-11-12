@@ -20,6 +20,7 @@ const impacts = [
   'você ajuda a manter os cuidados intensivos de animais em recuperação!'
 ];
 let selected = 1;
+let lastClickedTier = -1;
 let showError = false;
 let renderedAmount;
 let renderedImpact;
@@ -78,7 +79,12 @@ function selectTier(index) {
   }
 }
 
-tiers.forEach((button, index) => button.addEventListener('click', () => selectTier(index)));
+tiers.forEach((button, index) => button.addEventListener('click', () => {
+  const secondClick = index === lastClickedTier && button !== customButton;
+  selectTier(index);
+  lastClickedTier = index;
+  if (secondClick) mainButton.click();
+}));
 customInput.addEventListener('input', () => {
   if (tiers[selected] === customButton) updateCustom();
 });

@@ -39,7 +39,6 @@ import {trackConfirmedDonation} from './meta-pixel.js';
         <div class="pix-instructions">
           <h3>Como ajudar pelo Pix</h3>
           <p>Abra seu banco, escolha Pix Copia e Cola e cole o código acima. Se estiver em outro aparelho, escaneie o QR Code.</p>
-          <p>Confira o valor e os dados do recebedor antes de confirmar.</p>
           <p class="pix-expiry" hidden></p>
         </div>
       </div>

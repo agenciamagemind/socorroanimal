@@ -78,6 +78,21 @@
 .custom-donation__hint, .custom-donation__error { margin: 8px 0 0; font-size: .83rem; line-height: 1.5; }
 .custom-donation__hint { color: #4b5563; }
 .custom-donation__error { color: #b91c1c; font-weight: 600; }
+.recent-donations-ticker { min-width: 0; }
+.recent-donations-ticker .ticker-header-row { min-width: 0; width: 100%; }
+.recent-donations-ticker .ticker-header { min-width: 0; flex: 1 1 auto; }
+.recent-donations-ticker .ticker-header strong { overflow-wrap: normal; }
+.recent-donations-ticker .ticker-nav-controls { flex: 0 0 auto; }
+.recent-donations-ticker .ticker-counter { min-width: 40px; box-sizing: border-box; }
+@media (max-width: 420px) {
+  .recent-donations-ticker { padding: 10px; }
+  .recent-donations-ticker .ticker-header-row { gap: 6px; }
+  .recent-donations-ticker .ticker-header { font-size: .79rem; gap: 5px; }
+  .recent-donations-ticker .ticker-nav-controls { gap: 4px; }
+  .recent-donations-ticker .ticker-nav-btn { width: 27px; height: 27px; min-width: 27px; }
+  .recent-donations-ticker .ticker-counter { padding: 2px 5px; min-width: 35px; font-size: 11px; }
+  .recent-donations-ticker .ticker-item { padding: 8px 9px; font-size: .78rem; }
+}
 @media (max-width: 768px) {
   .hero__media-card--desktop { display: none !important; }
   .hero__media-card--mobile { display: block !important; margin: 4px 0 24px !important; }
