@@ -58,9 +58,9 @@ export function createHandler(env: Env, mode: Mode, transport: typeof fetch = fe
     return response.json();
   }
   const rpc=(name: string,body: Row)=>database('rpc/'+name,'POST',body);
-  async function provider(path: string, method='GET', body?: Row): Promise<Row> {
+  async function provider(path: string, method: 'GET' | 'POST', payload?: string): Promise<Row> {
     let response: Response;
-    try { response=await transport('https://paguezy.com/api/v1'+path,{method,headers:{'Content-Type':'application/json','Accept':'application/json','X-Api-Key':apiKey,'X-Api-Secret':apiSecret},body:body?JSON.stringify(body):undefined,signal:AbortSignal.timeout(25000),redirect:'error'}); }
+    try { response=await transport('https://paguezy.com/api/v1'+path,{method,headers:{'Content-Type':'application/json','Accept':'application/json','X-Api-Key':apiKey,'X-Api-Secret':apiSecret},body:payload,credentials:'omit',referrerPolicy:'no-referrer',cache:'no-store',signal:AbortSignal.timeout(25000),redirect:'error'}); }
     catch { throw new HttpError(502,'Não foi possível confirmar a solicitação de Pix. Aguarde um pouco antes de tentar novamente.'); }
     if (!response.ok) throw new HttpError(502,'Não foi possível concluir esta solicitação de pagamento. Tente novamente em instantes.');
     let data: Row;
@@ -68,6 +68,15 @@ export function createHandler(env: Env, mode: Mode, transport: typeof fetch = fe
     if (!data || typeof data!=='object' || data.success===false) throw new HttpError(502,'Não foi possível concluir esta solicitação de Pix.');
     for (const field of ['data','payment','transaction']) if(data[field] && typeof data[field]==='object') {data=data[field];break;}
     return data;
+  }
+  function createProviderPayment(amount: number, externalReference: string): Promise<Row> {
+    if(!validAmount(amount) || !/^SA-[a-f0-9-]{36}$/.test(externalReference)) throw new HttpError(502,'Não foi possível iniciar esta cobrança Pix.');
+    // Explicitly allowlist upstream fields. Never relay browser headers, customer data, or source URLs.
+    return provider('/payments','POST',JSON.stringify({amount,payment_method:'pix',external_reference:externalReference}));
+  }
+  function getProviderPayment(transactionId: string): Promise<Row> {
+    if(!/^[A-Za-z0-9_-]{1,180}$/.test(transactionId)) throw new HttpError(502,'Não foi possível consultar esta cobrança Pix.');
+    return provider('/payments/'+encodeURIComponent(transactionId),'GET');
   }
   async function session(token: string, origin: string): Promise<Row | null> {
     const parts=token.split('.');
@@ -164,7 +173,7 @@ export function createHandler(env: Env, mode: Mode, transport: typeof fetch = fe
           return result(publicPayment(row),201);
         }
         try {
-          const data=normalizePayment(await provider('/payments','POST',{amount:input.amount,payment_method:'pix',external_reference:row.external_reference}),input.amount,true);
+          const data=normalizePayment(await createProviderPayment(input.amount,row.external_reference),input.amount,true);
           const updated=await rpc('socorro_update_pix',{p_token:row.token,p_status:data.status,p_transaction:data.transaction_id,p_code:data.pix_copy_paste,p_expires:data.expires_at});
           return result(publicPayment(updated),201);
         } catch(e) {try{await rpc('socorro_update_pix',{p_token:row.token,p_status:'unknown'});}catch{}throw e;}
@@ -174,7 +183,7 @@ export function createHandler(env: Env, mode: Mode, transport: typeof fetch = fe
         if(row.status==='paid' || !row.transaction_id) return result(publicPayment(row));
         const claimed=await rpc('socorro_claim_pix',{p_token:row.token});
         if(!claimed.claimed) return result(publicPayment(claimed.payment));
-        const data=normalizePayment(await provider('/payments/'+encodeURIComponent(row.transaction_id)),row.amount);
+        const data=normalizePayment(await getProviderPayment(row.transaction_id),row.amount);
         if(data.transaction_id && data.transaction_id!==row.transaction_id) throw new HttpError(502,'Não foi possível confirmar este Pix.');
         const updated=await rpc('socorro_update_pix',{p_token:row.token,p_status:data.status});
         return result(publicPayment(updated));

@@ -12,7 +12,7 @@ function fixture() {
   const transport=async(url,options={})=>{
     const u=new URL(url),body=options.body?JSON.parse(options.body):{};
     if(u.host==='paguezy.com') {
-      state.calls.push({path:u.pathname,method:options.method,body});
+      state.calls.push({url:u.href,path:u.pathname,method:options.method,body,headers:Object.fromEntries(new Headers(options.headers)),referrerPolicy:options.referrerPolicy,credentials:options.credentials,redirect:options.redirect});
       if(state.fail)return Response.json({error:'unavailable'},{status:503});
       if(options.method==='POST') {
         const row={id:'trx_'+(state.provider.size+1),amount:body.amount,status:'pending',pix_copy_paste:'000201-MOCK-CODE-NOT-A-REAL-PAYMENT-6304ABCD'};
@@ -67,6 +67,33 @@ test('validates integer cents, preset amounts and custom donations',async()=>{
     const p=await f.create(b,amount);assert.equal(p.status,201);assert.equal(p.data.amount,amount);assert.equal(p.data.status,'pending');
   }
   assert.equal(f.state.calls.length,amounts.length);assert.ok(f.state.calls.every(c=>!c.body.customer && c.body.payment_method==='pix'));
+});
+test('provider sees only whitelisted payment data, never visitor IP, page URL or browser headers',async()=>{
+  const f=fixture(),b=await f.boot(),request_id=crypto.randomUUID();
+  const page='https://socorroanimal.online/checkout?utm_source=campaign';
+  const p=await f.call('create',{amount:2000,request_id,customer:{name:'Private Donor',email:'private@example.invalid',ip:'203.0.113.12'},page_url:page,cpf:'00000000000'},b,{
+    Referer:page,'X-Forwarded-For':'203.0.113.12','X-Real-IP':'203.0.113.12','X-Customer-Email':'private@example.invalid',
+  });
+  assert.equal(p.status,201);
+  assert.equal((await f.call('status&token='+p.data.token,undefined,b)).status,200);
+  assert.equal(f.state.calls.length,2);
+  const [created,checked]=f.state.calls;
+  assert.deepEqual(Object.keys(created.body).sort(),['amount','external_reference','payment_method']);
+  assert.equal(created.body.amount,2000);
+  assert.equal(created.body.payment_method,'pix');
+  assert.match(created.body.external_reference,/^SA-[a-f0-9-]{36}$/);
+  assert.deepEqual(checked.body,{});
+  assert.equal(checked.method,'GET');
+  assert.equal(checked.url,'https://paguezy.com/api/v1/payments/trx_1');
+  for(const call of f.state.calls){
+    assert.equal(call.url.startsWith('https://paguezy.com/api/v1/payments'),true);
+    assert.deepEqual(Object.keys(call.headers).sort(),['accept','content-type','x-api-key','x-api-secret']);
+    assert.equal(call.referrerPolicy,'no-referrer');
+    assert.equal(call.credentials,'omit');
+    assert.equal(call.redirect,'error');
+    const sent=JSON.stringify(call);
+    for(const privateValue of [page,'203.0.113.12','private@example.invalid','Private Donor','00000000000','referer','x-forwarded-for']) assert.ok(!sent.includes(privateValue),privateValue);
+  }
 });
 test('repeated clicks and pending orders do not create duplicate upstream charges',async()=>{
   const f=fixture(),b=await f.boot(),id=crypto.randomUUID();

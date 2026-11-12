@@ -67,7 +67,7 @@ import {trackConfirmedDonation} from './meta-pixel.js';
     const url = new URL(endpoint);
     url.searchParams.set('action', action);
     if (options.token) url.searchParams.set('token', options.token);
-    const response = await fetch(url, {method:options.body ? 'POST' : 'GET', credentials:'omit', cache:'no-store', signal:options.signal,
+    const response = await fetch(url, {method:options.body ? 'POST' : 'GET', credentials:'omit', referrerPolicy:'no-referrer', cache:'no-store', signal:options.signal,
       headers:{...(options.body ? {'Content-Type':'application/json','X-CSRF-Token':options.csrf} : {'Accept':'application/json'}),...(sessionToken ? {'Authorization':'Bearer '+sessionToken} : {})},
       body:options.body ? JSON.stringify(options.body) : undefined});
     let data;

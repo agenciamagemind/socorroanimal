@@ -16,6 +16,6 @@ assert.ok(html.includes('img-src \'self\' data: https://www.facebook.com;'));
 assert.ok(html.includes('connect-src \'self\' https://lfvnnxdbphxbscnrrpoi.supabase.co https://www.facebook.com;'));
 assert.ok(html.includes('assets/pix-checkout.js?v=20261112-pix'));
 for(const match of html.matchAll(/(?:src|href|poster)="((?:assets|videos)\/[^"]+)"/g))assert.ok(fs.existsSync(new URL(match[1],root)),match[1]);
-function scan(dir){for(const entry of fs.readdirSync(dir,{withFileTypes:true})){const f=path.join(dir,entry.name);if(entry.isDirectory())scan(f);else if(/\.(html|css|js)$/.test(f)){const text=fs.readFileSync(f,'utf8');assert.ok(!/\b(?:sk_live_|sk_test_|sb_secret_)[A-Za-z0-9]{16,}/.test(text),`Secret in ${f}`);}}}
+function scan(dir){for(const entry of fs.readdirSync(dir,{withFileTypes:true})){const f=path.join(dir,entry.name);if(entry.isDirectory())scan(f);else if(/\.(html|css|js)$/.test(f)){const text=fs.readFileSync(f,'utf8');assert.ok(!/\b(?:sk_live_|sk_test_|sb_secret_)[A-Za-z0-9]{16,}/.test(text),`Secret in ${f}`);assert.ok(!/https?:\/\/(?:www\.)?paguezy\.com/i.test(text),`Direct provider link in public site: ${f}`);}}}
 scan(fileURLToPath(root));
 console.log('Site estático válido; dependências locais presentes e nenhum segredo no conteúdo publicado.');

@@ -128,7 +128,7 @@ if (ticker && track && count && heading) {
     try {
       const url = new URL(api, location.href);
       url.searchParams.set('action', 'recent');
-      const response = await fetch(url, {credentials: 'omit', cache: 'no-store', headers: {Accept: 'application/json'}});
+      const response = await fetch(url, {credentials: 'omit', referrerPolicy: 'no-referrer', cache: 'no-store', headers: {Accept: 'application/json'}});
       if (!response.ok) return;
       const data = await response.json();
       if (Array.isArray(data.donations) && data.donations.length) {
